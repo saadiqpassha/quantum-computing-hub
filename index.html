@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚛️ The Quantum Computing Hub – Open-Source Tool Directory</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #070912;
+    --bg-panel: #0d1020;
+    --bg-card: #10142a;
+    --line: #232746;
+    --text: #e7e9f5;
+    --muted: #8b8fb0;
+    --violet: #8b7bff;
+    --cyan: #4fd8d8;
+    --amber: #f2b869;
+    --radius: 10px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 800px 500px at 15% -10%, rgba(139,123,255,0.18), transparent 60%),
+      radial-gradient(ellipse 900px 600px at 110% 10%, rgba(79,216,216,0.12), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+  }
+  h1,h2,h3,.display{font-family:'Space Grotesk', sans-serif;}
+  code, .mono, .license, .stat-num{font-family:'IBM Plex Mono', monospace;}
+
+  a{color:inherit; text-decoration:none;}
+
+  /* ---- Nav ---- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:rgba(7,9,18,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-wrap{
+    max-width:1200px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; gap:24px;
+  }
+  .brand{font-weight:700; font-size:1.15rem; letter-spacing:0.2px; white-space:nowrap; cursor:pointer;}
+  .brand .q{color:var(--violet);}
+  nav.pills{display:flex; gap:6px; flex-wrap:wrap; overflow-x:auto;}
+  nav.pills button{
+    background:transparent; border:1px solid var(--line); color:var(--muted);
+    padding:6px 12px; border-radius:999px; font-size:0.8rem; cursor:pointer;
+    white-space:nowrap; transition:all .15s;
+  }
+  nav.pills button:hover{ color:var(--text); border-color:var(--violet); }
+  nav.pills button.active{ background:var(--violet); color:#0a0b16; border-color:var(--violet); font-weight:600;}
+
+  /* ---- Hero ---- */
+  .hero{max-width:1200px; margin:0 auto; padding:64px 24px 40px;}
+  .eyebrow{
+    color:var(--cyan); font-size:0.8rem; letter-spacing:2px; text-transform:uppercase; font-weight:600;
+    display:flex; align-items:center; gap:8px; margin-bottom:18px;
+  }
+  .eyebrow::before{content:''; width:24px; height:1px; background:var(--cyan); display:inline-block;}
+  .hero h1{
+    font-size:clamp(2.1rem, 5vw, 3.4rem); font-weight:700; margin:0 0 18px; max-width:820px; line-height:1.08;
+  }
+  .hero h1 .gradient{
+    background:linear-gradient(90deg, var(--violet), var(--cyan));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p.lede{color:var(--muted); font-size:1.05rem; max-width:620px; margin:0 0 34px;}
+  .stat-row{display:flex; gap:40px; flex-wrap:wrap; margin-bottom:36px;}
+  .stat-num{font-size:2rem; font-weight:600; color:var(--text);}
+  .stat-num span{color:var(--violet);}
+  .stat-label{color:var(--muted); font-size:0.8rem; text-transform:uppercase; letter-spacing:1px;}
+  .cta-row{display:flex; gap:14px;}
+  .btn-primary{
+    background:var(--violet); color:#0a0b16; padding:12px 22px; border-radius:8px; font-weight:600; font-size:0.92rem;
+    cursor:pointer; border:none;
+  }
+  .btn-ghost{
+    border:1px solid var(--line); padding:12px 22px; border-radius:8px; font-weight:500; font-size:0.92rem; cursor:pointer;
+    color:var(--muted); background:transparent;
+  }
+  .btn-ghost:hover{border-color:var(--cyan); color:var(--text);}
+
+  /* ---- circuit divider signature element ---- */
+  .circuit-rule{
+    max-width:1200px; margin:0 auto; padding:0 24px 10px;
+    display:flex; align-items:center; gap:6px; opacity:0.55;
+  }
+  .circuit-rule .wire{flex:1; height:1px; background:var(--line);}
+  .circuit-rule .node{width:6px; height:6px; border-radius:50%; background:var(--cyan);}
+  .circuit-rule .gate{
+    font-family:'IBM Plex Mono'; font-size:0.65rem; color:var(--muted); border:1px solid var(--line);
+    padding:2px 6px; border-radius:3px;
+  }
+
+  /* ---- Domain grid ---- */
+  #domain-grid{max-width:1200px; margin:0 auto; padding:20px 24px 80px;}
+  .grid-title{font-size:1.05rem; color:var(--muted); margin:0 0 20px; font-weight:500;}
+  .grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(230px,1fr)); gap:14px;
+  }
+  .domain-card{
+    background:var(--bg-card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:20px; cursor:pointer; transition:transform .15s, border-color .15s;
+  }
+  .domain-card:hover{ transform:translateY(-3px); border-color:var(--violet); }
+  .domain-card .icon{font-size:1.6rem; display:block; margin-bottom:12px;}
+  .domain-card h3{margin:0 0 4px; font-size:1rem;}
+  .domain-card .cat{color:var(--muted); font-size:0.78rem;}
+
+  /* ---- Detail section ---- */
+  .detail{max-width:1200px; margin:0 auto; padding:40px 24px 90px; display:none;}
+  .detail.active{display:block;}
+  .back-link{color:var(--cyan); font-size:0.85rem; cursor:pointer; display:inline-flex; align-items:center; gap:6px; margin-bottom:26px;}
+  .back-link:hover{text-decoration:underline;}
+  .detail-head h2{font-size:1.9rem; margin:0 0 8px;}
+  .detail-head p{color:var(--muted); margin:0 0 40px; max-width:680px;}
+
+  .subcat{margin-bottom:38px;}
+  .subcat-label{
+    font-size:0.75rem; letter-spacing:1.5px; text-transform:uppercase; color:var(--amber);
+    font-weight:600; margin-bottom:14px; display:flex; align-items:center; gap:10px;
+  }
+  .subcat-label::after{content:''; flex:1; height:1px; background:var(--line);}
+  .tool-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:14px;}
+  .tool-card{
+    background:var(--bg-panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px;
+    transition:border-color .15s;
+  }
+  .tool-card:hover{border-color:var(--cyan);}
+  .tool-card h4{margin:0 0 6px; font-size:1rem;}
+  .tool-card p{margin:0 0 14px; color:var(--muted); font-size:0.87rem; line-height:1.45;}
+  .tool-meta{display:flex; align-items:center; justify-content:space-between;}
+  .license{
+    font-size:0.72rem; color:var(--violet); border:1px solid rgba(139,123,255,0.35);
+    padding:2px 8px; border-radius:5px; background:rgba(139,123,255,0.08);
+  }
+  .gh-link{font-size:0.82rem; color:var(--cyan);}
+  .gh-link:hover{text-decoration:underline;}
+
+  footer{
+    border-top:1px solid var(--line); padding:28px 24px; text-align:center;
+    color:var(--muted); font-size:0.82rem;
+  }
+  footer a{color:var(--cyan);}
+
+  @media (max-width:640px){
+    .nav-wrap{flex-direction:column; align-items:flex-start; gap:10px;}
+    nav.pills{width:100%;}
+    .stat-row{gap:24px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand" onclick="showGrid()"><span class="q">⚛️</span> QuantumHub</div>
+    <nav class="pills" id="navPills"></nav>
+  </div>
+</header>
+
+<section class="hero" id="heroSection">
+  <div class="eyebrow">Open-source · curated · free forever</div>
+  <h1>The <span class="gradient">Quantum Computing</span> tool directory</h1>
+  <p class="lede">Your gateway to 15+ quantum computing domains — SDKs, simulators, error correction, cryptography, hardware control and more, all open source.</p>
+  <div class="stat-row">
+    <div><div class="stat-num"><span>15+</span></div><div class="stat-label">Domains</div></div>
+    <div><div class="stat-num"><span>60+</span></div><div class="stat-label">Tools</div></div>
+    <div><div class="stat-num"><span>100%</span></div><div class="stat-label">Open Source</div></div>
+  </div>
+  <div class="cta-row">
+    <button class="btn-primary" onclick="document.getElementById('domain-grid').scrollIntoView({behavior:'smooth'})">Browse All Domains</button>
+  </div>
+</section>
+
+<div class="circuit-rule">
+  <span class="node"></span><span class="wire"></span><span class="gate">H</span><span class="wire"></span>
+  <span class="node"></span><span class="wire"></span><span class="gate">X</span><span class="wire"></span>
+  <span class="node"></span><span class="wire"></span><span class="gate">•</span><span class="wire"></span>
+  <span class="node"></span>
+</div>
+
+<section id="domain-grid">
+  <p class="grid-title">Browse by domain</p>
+  <div class="grid" id="domainGrid"></div>
+</section>
+
+<div id="details"></div>
+
+<footer>
+  ⚛️ The Quantum Computing Hub — All tools are open-source. | Inspired by <a href="https://the-cybersecurity-hub.github.io/The-Cybersecurity-Hub/" target="_blank">The Cybersecurity Hub</a>
+</footer>
+
+<script>
+const DATA = [
+  { id:"sdks", icon:"🧰", name:"Quantum SDKs & Frameworks", cat:"Core Development",
+    desc:"Circuit construction, gate-level programming and vendor SDKs for building quantum programs.",
+    subs:[
+      { label:"Circuit-Based SDKs", tools:[
+        {n:"Qiskit", d:"IBM's full-stack SDK for building, transpiling and running quantum circuits.", lic:"Apache 2.0", url:"https://github.com/Qiskit/qiskit"},
+        {n:"Cirq", d:"Google's Python framework for writing and simulating NISQ circuits.", lic:"Apache 2.0", url:"https://github.com/quantumlib/Cirq"}
+      ]},
+      { label:"High-Level Frameworks", tools:[
+        {n:"PennyLane", d:"Cross-platform framework unifying quantum computing and differentiable programming.", lic:"Apache 2.0", url:"https://github.com/PennyLaneAI/pennylane"},
+        {n:"Q# / QDK", d:"Microsoft's quantum-focused language and development kit.", lic:"MIT", url:"https://github.com/microsoft/qsharp"}
+      ]},
+      { label:"Vendor & Alternative SDKs", tools:[
+        {n:"pyQuil", d:"Rigetti's Python library for quantum programming on Quil-based hardware.", lic:"Apache 2.0", url:"https://github.com/rigetti/pyquil"},
+        {n:"ProjectQ", d:"Open-source framework for quantum computing with a compiler backend.", lic:"Apache 2.0", url:"https://github.com/ProjectQ-Framework/ProjectQ"}
+      ]}
+    ]
+  },
+  { id:"sims", icon:"🖥️", name:"Quantum Simulators", cat:"Execution & Modeling",
+    desc:"Classical simulation of quantum systems — state vector, stabilizer, and open-system engines.",
+    subs:[
+      { label:"State Vector Simulators", tools:[
+        {n:"Qiskit Aer", d:"High-performance simulator backend for Qiskit circuits and noise models.", lic:"Apache 2.0", url:"https://github.com/Qiskit/qiskit-aer"},
+        {n:"Qulacs", d:"Fast C++/Python library for simulating large quantum circuits.", lic:"MIT", url:"https://github.com/qulacs/qulacs"}
+      ]},
+      { label:"Stabilizer & Decision-Diagram Simulation", tools:[
+        {n:"Stim", d:"Extremely fast stabilizer circuit simulator built for error-correction research.", lic:"Apache 2.0", url:"https://github.com/quantumlib/Stim"},
+        {n:"MQT DDSIM", d:"Decision-diagram based simulator from the Munich Quantum Toolkit.", lic:"MIT", url:"https://github.com/cda-tum/mqt-ddsim"}
+      ]},
+      { label:"Open Quantum Systems", tools:[
+        {n:"QuTiP", d:"Simulates dynamics of open quantum systems with noise and dissipation.", lic:"BSD", url:"https://github.com/qutip/qutip"},
+        {n:"Intel Quantum Simulator", d:"HPC-oriented distributed state vector simulator.", lic:"Apache 2.0", url:"https://github.com/iqusoft/intel-qs"}
+      ]},
+      { label:"Photonic Simulation", tools:[
+        {n:"Strawberry Fields", d:"Xanadu's framework for simulating continuous-variable photonic circuits.", lic:"Apache 2.0", url:"https://github.com/XanaduAI/strawberryfields"},
+        {n:"The Walrus", d:"Fast library for Gaussian boson sampling and photonic tensor computations.", lic:"Apache 2.0", url:"https://github.com/XanaduAI/thewalrus"}
+      ]}
+    ]
+  },
+  { id:"algos", icon:"🧮", name:"Quantum Algorithms & Circuits", cat:"Programming",
+    desc:"Variational algorithm libraries and circuit representation standards.",
+    subs:[
+      { label:"Variational Algorithms (VQE / QAOA)", tools:[
+        {n:"Tequila", d:"Framework for building and optimizing variational quantum algorithms.", lic:"MIT", url:"https://github.com/tequilahub/tequila"},
+        {n:"Qiskit Algorithms", d:"Standalone library of quantum algorithm building blocks like VQE and QPE.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-algorithms"}
+      ]},
+      { label:"Circuit Representation & Interactive Design", tools:[
+        {n:"OpenQASM", d:"Open standard intermediate representation for quantum circuits.", lic:"Apache 2.0", url:"https://github.com/openqasm/openqasm"},
+        {n:"quantum-circuit", d:"JavaScript circuit simulator and converter for building interactive, browser-based tools.", lic:"MIT", url:"https://github.com/quantastica/quantum-circuit"}
+      ]}
+    ]
+  },
+  { id:"qec", icon:"🛡️", name:"Quantum Error Correction", cat:"Reliability",
+    desc:"Code simulation, decoding and verification for fault-tolerant quantum computing.",
+    subs:[
+      { label:"QEC Code Simulation", tools:[
+        {n:"PanQEC", d:"Simulation and visualization toolkit for topological quantum error-correcting codes.", lic:"MIT", url:"https://github.com/panqec/panqec"},
+        {n:"PyMatching", d:"Fast minimum-weight perfect matching decoder for surface codes.", lic:"MIT", url:"https://github.com/oscarhiggott/PyMatching"}
+      ]},
+      { label:"Verification & Characterization", tools:[
+        {n:"Qiskit QEC", d:"Framework from IBM/Qiskit-community dedicated to quantum error correction research.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-qec"},
+        {n:"Qiskit Experiments", d:"Framework for calibration, characterization and QEC benchmarking experiments.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-experiments"}
+      ]}
+    ]
+  },
+  { id:"compilers", icon:"🔧", name:"Quantum Compilers & Transpilers", cat:"Optimization",
+    desc:"Circuit optimization, mapping and cross-platform compilation toolchains.",
+    subs:[
+      { label:"Circuit Optimization", tools:[
+        {n:"tket", d:"Quantinuum's retargetable circuit optimizing compiler.", lic:"Apache 2.0", url:"https://github.com/CQCL/tket"},
+        {n:"BQSKit", d:"Big Quantum Synthesis Kit for circuit optimization and synthesis.", lic:"BSD", url:"https://github.com/BQSKit/bqskit"}
+      ]},
+      { label:"Compiler Toolchains", tools:[
+        {n:"staq", d:"Full-stack quantum compiler toolkit supporting OpenQASM.", lic:"MIT", url:"https://github.com/softwareQinc/staq"},
+        {n:"XACC", d:"Extensible compilation framework for hybrid quantum-classical programming.", lic:"BSD-style (EDL)", url:"https://github.com/eclipse/xacc"}
+      ]}
+    ]
+  },
+  { id:"cloud", icon:"☁️", name:"Quantum Cloud Platforms", cat:"Access & Runtime",
+    desc:"SDKs for submitting jobs to cloud-hosted quantum hardware and runtimes.",
+    subs:[
+      { label:"Cloud SDKs", tools:[
+        {n:"Amazon Braket SDK", d:"Python SDK for building and running circuits on AWS Braket devices.", lic:"Apache 2.0", url:"https://github.com/aws/amazon-braket-sdk-python"},
+        {n:"Azure Quantum Python SDK", d:"Client SDK for submitting jobs to Azure Quantum providers.", lic:"MIT", url:"https://github.com/microsoft/azure-quantum-python"}
+      ]},
+      { label:"Provider Runtimes", tools:[
+        {n:"Qiskit IBM Runtime", d:"Primitives-based runtime client for executing workloads on IBM Quantum.", lic:"Apache 2.0", url:"https://github.com/Qiskit/qiskit-ibm-runtime"},
+        {n:"qBraid-SDK", d:"Cross-platform SDK for managing and submitting jobs across multiple quantum providers.", lic:"Apache 2.0", url:"https://github.com/qBraid/qBraid"}
+      ]}
+    ]
+  },
+  { id:"qml", icon:"🤖", name:"Quantum Machine Learning", cat:"Analytics & AI",
+    desc:"Hybrid quantum-classical models and differentiable quantum circuits for ML.",
+    subs:[
+      { label:"QML Frameworks", tools:[
+        {n:"Yao.jl", d:"Extensible Julia framework for quantum algorithm design with machine learning extensions.", lic:"Apache 2.0", url:"https://github.com/QuantumBFS/Yao.jl"},
+        {n:"TensorFlow Quantum", d:"Google library integrating quantum circuits with TensorFlow.", lic:"Apache 2.0", url:"https://github.com/tensorflow/quantum"}
+      ]},
+      { label:"Hybrid Neural Network Toolkits", tools:[
+        {n:"TorchQuantum", d:"PyTorch-native library for training parameterized quantum circuits.", lic:"MIT", url:"https://github.com/mit-han-lab/torchquantum"},
+        {n:"Qiskit Machine Learning", d:"Quantum kernels and neural networks built on Qiskit primitives.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-machine-learning"}
+      ]}
+    ]
+  },
+  { id:"crypto", icon:"🔐", name:"Quantum Cryptography & PQC", cat:"Security",
+    desc:"Post-quantum cryptographic libraries and quantum key distribution simulation.",
+    subs:[
+      { label:"Post-Quantum Crypto Libraries", tools:[
+        {n:"liboqs", d:"Open Quantum Safe's C library of post-quantum key exchange and signatures.", lic:"MIT", url:"https://github.com/open-quantum-safe/liboqs"},
+        {n:"PQClean", d:"Clean, portable reference implementations of PQC algorithms.", lic:"MIT / CC0", url:"https://github.com/PQClean/PQClean"}
+      ]},
+      { label:"Language Bindings & Integrations", tools:[
+        {n:"liboqs-python", d:"Python bindings for liboqs post-quantum primitives.", lic:"MIT", url:"https://github.com/open-quantum-safe/liboqs-python"},
+        {n:"Circl", d:"Cloudflare's cryptographic library with post-quantum key exchange and signatures for Go.", lic:"BSD 3-Clause", url:"https://github.com/cloudflare/circl"}
+      ]},
+      { label:"TLS / PKI Integration", tools:[
+        {n:"oqs-provider", d:"OpenSSL 3 provider adding post-quantum algorithms to TLS.", lic:"MIT", url:"https://github.com/open-quantum-safe/oqs-provider"},
+        {n:"Botan", d:"C++ cryptography library with built-in support for post-quantum schemes like Kyber and Dilithium.", lic:"BSD 2-Clause", url:"https://github.com/randombit/botan"}
+      ]}
+    ]
+  },
+  { id:"chem", icon:"⚛️", name:"Quantum Chemistry & Simulation", cat:"Applications",
+    desc:"Electronic structure calculations and quantum simulation of molecular systems.",
+    subs:[
+      { label:"Electronic Structure", tools:[
+        {n:"OpenFermion", d:"Library for compiling and analyzing quantum chemistry Hamiltonians.", lic:"Apache 2.0", url:"https://github.com/quantumlib/OpenFermion"},
+        {n:"Qiskit Nature", d:"Domain-specific chemistry and physics algorithms built on Qiskit.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-nature"}
+      ]},
+      { label:"Classical Chemistry Backends", tools:[
+        {n:"PySCF", d:"Python-based classical electronic structure package used alongside quantum tools.", lic:"Apache 2.0", url:"https://github.com/pyscf/pyscf"},
+        {n:"Psi4", d:"Open-source ab initio quantum chemistry package.", lic:"LGPL v3", url:"https://github.com/psi4/psi4"}
+      ]}
+    ]
+  },
+  { id:"net", icon:"🌐", name:"Quantum Networking", cat:"Infrastructure",
+    desc:"Discrete-event simulation of quantum repeaters, entanglement and network protocols.",
+    subs:[
+      { label:"Full-Network Simulation", tools:[
+        {n:"SeQUeNCe", d:"Discrete-event simulator modeling photonic quantum network hardware and protocols.", lic:"MIT", url:"https://github.com/sequence-toolbox/SeQUeNCe"},
+        {n:"SimulaQron", d:"Distributed simulator for prototyping quantum internet applications.", lic:"BSD", url:"https://github.com/SoftwareQuTech/SimulaQron"}
+      ]},
+      { label:"Protocol & Application-Layer Simulation", tools:[
+        {n:"QuNetSim", d:"Layered framework for writing and testing quantum network protocols.", lic:"MIT", url:"https://github.com/tqsd/QuNetSim"},
+        {n:"QuISP", d:"Event-driven simulator for quantum internet protocols built on OMNeT++.", lic:"MIT", url:"https://github.com/sfc-aqua/quisp"}
+      ]}
+    ]
+  },
+  { id:"opt", icon:"🎯", name:"Quantum Optimization", cat:"Combinatorial Solvers",
+    desc:"Annealing SDKs and gate-model solvers for combinatorial optimization problems.",
+    subs:[
+      { label:"Annealing SDKs", tools:[
+        {n:"D-Wave Ocean SDK", d:"Full SDK for formulating and solving problems on D-Wave annealers.", lic:"Apache 2.0", url:"https://github.com/dwavesystems/dwave-ocean-sdk"},
+        {n:"OpenJij", d:"Open-source Ising model / QUBO solver framework.", lic:"Apache 2.0", url:"https://github.com/OpenJij/OpenJij"}
+      ]},
+      { label:"QAOA & Gate-Model Optimization", tools:[
+        {n:"Qiskit Optimization", d:"Converts optimization problems into circuits solvable via QAOA and VQE.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-optimization"},
+        {n:"Qibo", d:"Full-stack quantum computing framework with built-in combinatorial optimization models.", lic:"Apache 2.0", url:"https://github.com/qiboteam/qibo"}
+      ]}
+    ]
+  },
+  { id:"testing", icon:"🧪", name:"Quantum Software Testing & Verification", cat:"Quality Assurance",
+    desc:"Equivalence checking, error mitigation and validation tooling for quantum programs.",
+    subs:[
+      { label:"Equivalence & Formal Verification", tools:[
+        {n:"MQT QCEC", d:"Verifies that two circuit representations implement the same unitary.", lic:"MIT", url:"https://github.com/cda-tum/mqt-qcec"},
+        {n:"Feynman", d:"Formal verification and optimization tool for quantum circuits using path-sum techniques.", lic:"BSD 3-Clause", url:"https://github.com/meamy/feynman"}
+      ]},
+      { label:"Error Mitigation & Validation", tools:[
+        {n:"Mitiq", d:"Toolkit for applying error-mitigation techniques to NISQ programs.", lic:"GPL v3", url:"https://github.com/unitaryfund/mitiq"},
+        {n:"Qermit", d:"Quantinuum's error-mitigation toolkit built on top of the tket compiler stack.", lic:"Apache 2.0", url:"https://github.com/CQCL/Qermit"}
+      ]}
+    ]
+  },
+  { id:"bench", icon:"📊", name:"Quantum Benchmarking", cat:"Performance Evaluation",
+    desc:"Standardized suites for comparing quantum hardware and software performance.",
+    subs:[
+      { label:"Benchmark Suites", tools:[
+        {n:"SupermarQ", d:"Application-oriented benchmark suite for quantum hardware comparison.", lic:"Apache 2.0", url:"https://github.com/Infleqtion/client-superstaq"},
+        {n:"MQT Bench", d:"Munich Quantum Toolkit's benchmark library spanning algorithm, compiler and hardware levels.", lic:"MIT", url:"https://github.com/cda-tum/mqt-bench"}
+      ]},
+      { label:"Hardware & Circuit Metrics", tools:[
+        {n:"QASMBench", d:"Collection of realistic OpenQASM benchmark circuits for evaluation.", lic:"BSD", url:"https://github.com/pnnl/QASMBench"},
+        {n:"Qiskit Device Benchmarking", d:"IBM toolkit for running standardized characterization benchmarks on real hardware.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-device-benchmarking"}
+      ]}
+    ]
+  },
+  { id:"hw", icon:"🔬", name:"Quantum Hardware Control", cat:"Lab & Device Layer",
+    desc:"Instrument control, pulse-level programming and chip design toolchains.",
+    subs:[
+      { label:"Instrument Control", tools:[
+        {n:"QCoDeS", d:"Python framework for controlling lab instruments in quantum experiments.", lic:"MIT", url:"https://github.com/QCoDeS/Qcodes"},
+        {n:"ARTIQ", d:"Real-time control system for trapped-ion and AMO physics experiments.", lic:"LGPL v3", url:"https://github.com/m-labs/artiq"}
+      ]},
+      { label:"Chip & Pulse-Level Design", tools:[
+        {n:"Qiskit Metal", d:"Design automation framework for superconducting quantum chips.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-metal"},
+        {n:"Qiskit Dynamics", d:"Pulse-level simulation of quantum hardware dynamics.", lic:"Apache 2.0", url:"https://github.com/qiskit-community/qiskit-dynamics"}
+      ]}
+    ]
+  },
+  { id:"edu", icon:"🎓", name:"Quantum Education & Training", cat:"Learning",
+    desc:"Interactive learning material, coding katas and curated resource lists.",
+    subs:[
+      { label:"Learning Resources", tools:[
+        {n:"Qiskit Textbook", d:"Open-source interactive textbook for learning quantum computing with Qiskit.", lic:"Apache 2.0", url:"https://github.com/Qiskit/textbook"},
+        {n:"Microsoft Quantum Katas", d:"Self-paced programming exercises for learning quantum computing in Q#.", lic:"MIT", url:"https://github.com/microsoft/QuantumKatas"}
+      ]},
+      { label:"Interactive Tools & Curated Lists", tools:[
+        {n:"Quirk", d:"Browser-based drag-and-drop circuit simulator, popular for teaching.", lic:"Apache 2.0", url:"https://github.com/Strilanc/Quirk"},
+        {n:"Awesome Quantum Computing", d:"Curated list of quantum computing tools, papers and resources.", lic:"CC0", url:"https://github.com/desireevl/awesome-quantum-computing"}
+      ]}
+    ]
+  }
+];
+
+const navPills = document.getElementById('navPills');
+const domainGrid = document.getElementById('domainGrid');
+const detailsWrap = document.getElementById('details');
+const hero = document.getElementById('heroSection');
+const gridSection = document.getElementById('domain-grid');
+
+DATA.forEach(d=>{
+  // nav pill
+  const btn = document.createElement('button');
+  btn.textContent = d.name.replace('Quantum ','').replace(' & ',' & ');
+  btn.onclick = ()=>showDomain(d.id);
+  btn.id = 'pill-'+d.id;
+  navPills.appendChild(btn);
+
+  // grid card
+  const card = document.createElement('div');
+  card.className='domain-card';
+  card.onclick = ()=>showDomain(d.id);
+  card.innerHTML = `<span class="icon">${d.icon}</span><h3>${d.name}</h3><div class="cat">${d.cat}</div>`;
+  domainGrid.appendChild(card);
+
+  // detail section
+  const sec = document.createElement('section');
+  sec.className='detail';
+  sec.id='detail-'+d.id;
+  let subsHtml = d.subs.map(s=>`
+    <div class="subcat">
+      <div class="subcat-label">${s.label}</div>
+      <div class="tool-grid">
+        ${s.tools.map(t=>`
+          <div class="tool-card">
+            <h4>${t.n}</h4>
+            <p>${t.d}</p>
+            <div class="tool-meta">
+              <span class="license">${t.lic}</span>
+              <a class="gh-link" href="${t.url}" target="_blank">GitHub →</a>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+  sec.innerHTML = `
+    <div class="back-link" onclick="showGrid()">← All Domains</div>
+    <div class="detail-head">
+      <h2>${d.icon} ${d.name}</h2>
+      <p>${d.desc}</p>
+    </div>
+    ${subsHtml}
+  `;
+  detailsWrap.appendChild(sec);
+});
+
+function showDomain(id){
+  document.querySelectorAll('.detail').forEach(s=>s.classList.remove('active'));
+  document.getElementById('detail-'+id).classList.add('active');
+  hero.style.display='none';
+  gridSection.style.display='none';
+  document.querySelectorAll('nav.pills button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pill-'+id).classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+function showGrid(){
+  document.querySelectorAll('.detail').forEach(s=>s.classList.remove('active'));
+  hero.style.display='';
+  gridSection.style.display='';
+  document.querySelectorAll('nav.pills button').forEach(b=>b.classList.remove('active'));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
